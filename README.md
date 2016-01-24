@@ -17,6 +17,9 @@ The code is base on `python3`. All the necesseary dependencies are available fro
  * `dateparser`
  * `pyquery`
  * `slackbot`
+ * `requests`
+ 
+You can instal the dependencies siply by executing `pip3 install -r requirements.pip`.
 
 ### Settings
 Copy the `settings_local_template.py` as `settings_local.py` and populate it with your settings.
