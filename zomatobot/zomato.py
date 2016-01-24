@@ -1,7 +1,6 @@
 # coding: utf-8
 
 import datetime
-import re
 
 import dateparser
 import pyquery
@@ -59,39 +58,6 @@ class MenuItem:
         return self.__str__()
 
 
-def available_lunch_menu(menu_url):
-    div_root = pyquery.PyQuery(menu_url, headers={'User-Agent': USER_AGENT})
-    div_menu = div_root('#menu-preview')('.tmi-groups')
-    divs_daily_menu = div_menu.items('.tmi-group')
-    menus = {}
-    for div_menu in divs_daily_menu:
-        weekday_date = _get_trimmed_data(div_menu, '.tmi-group-name').split(', ')
-        date = dateparser.parse(weekday_date[1]).date()
-
-        items = []
-
-        divs_items = div_menu.items('.tmi.tmi-daily')
-        for div_dish in divs_items:
-            name = _get_trimmed_data(div_dish, '.tmi-name')
-            price = _get_trimmed_data(div_dish, '.tmi-price.right')
-
-            items.append(MenuItem(name, price))
-
-        menus[date] = DailyMenu(date, items)
-
-    return menus
-
-
-def _get_trimmed_data(node, selector):
-    return node(selector).text().strip()
-
-
-def _replace_ignore_case(text, what, to):
-    pattern = re.compile(what, re.IGNORECASE)
-
-    return pattern.sub(to, text)
-
-
 def today_lunch_menu(menu_url):
     today = datetime.datetime.now()
 
@@ -107,3 +73,59 @@ def lunch_menu(menu_url, date):
         menu = None
 
     return menu
+
+
+def available_lunch_menu(menu_url):
+    div_root = pyquery.PyQuery(menu_url, headers={'User-Agent': USER_AGENT})
+    div_menu = div_root('#menu-preview')('.tmi-groups')
+    divs_daily_menu = div_menu.items('.tmi-group')
+    menu_for_day = {}
+
+    for div_menu in divs_daily_menu:
+        weekday_date = _get_trimmed_data(div_menu, '.tmi-group-name').split(', ')
+        today_date = datetime.date.today()
+
+        date = dateparser.parse(weekday_date[1]).date()
+        date = _fix_year(date, today_date)
+
+        items = []
+
+        divs_items = div_menu.items('.tmi.tmi-daily')
+        for div_dish in divs_items:
+            name = _get_trimmed_data(div_dish, '.tmi-name')
+            price = _get_trimmed_data(div_dish, '.tmi-price.right')
+
+            items.append(MenuItem(name, price))
+
+        menu_for_day[date] = DailyMenu(date, items)
+
+    return menu_for_day
+
+
+def _fix_year(date, today_date):
+    """
+    The dates on Zomato site with menus consists only of a month and day. This method is used to determine proper
+    year for the date provided. It assumes that the menu displayed was up to date.
+
+    :param date: the date of the menu
+    :param today_date: todays date
+    :return: a date with day and month set to the same values as the date provided but with corrected year
+    """
+    today_year = today_date.year
+    today_month = today_date.month
+
+    day = date.day
+    month = date.month
+
+    if date.month == 12 and today_month == 1:
+        year = today_year - 1
+    elif date.month == 1 and today_month == 12:
+        year = today_year + 1
+    else:
+        year = today_year
+
+    return datetime.date(year, month, day)
+
+
+def _get_trimmed_data(node, selector):
+    return node(selector).text().strip()
