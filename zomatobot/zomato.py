@@ -6,6 +6,7 @@ import dateparser
 import pyquery
 import requests
 
+ACCEPTED_LANGUAGE = 'en,en-US'
 USER_AGENT = 'zomato_slack_bot/0.1'
 
 
@@ -14,23 +15,26 @@ class ZomatoApi:
         self.__api_key = api_key
 
     def search(self, query):
-        params = {'q': query}
+        params = {'q': query, 'sort': 'rating', 'order': 'desc'}
         api = 'search'
         response = self.get(api, params)
 
         return response
 
     def get(self, api, params):
-        headers = {'user_key': self.__api_key, 'Accept-Language': 'en,en-US;q=0.8,cs;q=0.6,sk;q=0.4',
-                   'User-Agent': USER_AGENT,
-                   'Accept': 'application/json'}
+        headers = {
+            'Accept': 'application/json',
+            'Accept-Language': ACCEPTED_LANGUAGE,
+            'User-Agent': USER_AGENT,
+            'user_key': self.__api_key,
+        }
         response = requests.get(
                 'https://developers.zomato.com/api/v2.1/%s' % api,
                 params=params,
                 headers=headers
-        ).json()
+        )
 
-        return response
+        return response.json()
 
 
 class DailyMenu:
