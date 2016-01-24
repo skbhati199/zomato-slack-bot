@@ -1,5 +1,3 @@
-# coding: utf-8
-
 import datetime
 
 import dateparser
@@ -43,11 +41,14 @@ class DailyMenu:
         self.items = items
 
     def __str__(self):
-        items = "\n".join([str(i) for i in self.items])
+        items = self.format()
         return 'Menu for {0}\n------------------------------\n{1}\n'.format(self.date, items)
 
     def __repr__(self):
         return self.__str__()
+
+    def format(self):
+        return "\n".join([item.format() for item in self.items])
 
 
 class MenuItem:
@@ -61,11 +62,8 @@ class MenuItem:
     def __repr__(self):
         return self.__str__()
 
-
-def today_lunch_menu(menu_url):
-    today = datetime.datetime.now()
-
-    return lunch_menu(menu_url, today)
+    def format(self):
+        return '{} _{}_'.format(self.name, self.price)
 
 
 def lunch_menu(menu_url, date):
