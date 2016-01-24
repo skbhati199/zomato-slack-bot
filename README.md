@@ -8,6 +8,11 @@ Unfortunately _Zomato_ does not seem to have an API for daily menus.
 I used the `pyquery` library to parse the menu from their pages.
 Any slight change of their web can break this code.
 
+## Goals
+
+The current hardcoded questions are dumb.
+I would like to use [quepy](https://github.com/machinalis/quepy) to parse messages and translate them into _Zomato api_ queries.
+
 ## How to use it
 
 You simply register a new bot to your Slack account and ask him/her to give you lunch menu of yout favourite restaurant.
