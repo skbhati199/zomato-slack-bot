@@ -1,0 +1,6 @@
+# The versions of requirements which I used or newer
+
+dateparser >= 0.3.1
+pyquery >= 1.2.10
+requests >= 2.9.1
+slackbot >= 0.3.0
