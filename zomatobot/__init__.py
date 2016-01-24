@@ -1,2 +1,1 @@
-from zomato import *
-import plugins
+from zomatobot.zomato import *

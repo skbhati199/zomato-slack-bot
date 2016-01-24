@@ -41,7 +41,7 @@ class DailyMenu:
 
     def __str__(self):
         items = "\n".join([str(i) for i in self.items])
-        return u"Menu for {0}\n------------------------------\n{1}\n".encode('utf-8').format(self.date, items)
+        return 'Menu for {0}\n------------------------------\n{1}\n'.format(self.date, items)
 
     def __repr__(self):
         return self.__str__()
@@ -53,7 +53,7 @@ class MenuItem:
         self.price = price
 
     def __str__(self):
-        return u"{} - {}".encode('utf-8').format(self.name, self.price)
+        return '{} - {}'.format(self.name, self.price)
 
     def __repr__(self):
         return self.__str__()
@@ -65,12 +65,12 @@ def available_lunch_menu(menu_url):
     divs_daily_menu = div_menu.items('.tmi-group')
     menus = {}
     for div_menu in divs_daily_menu:
-        weekday_date = _get_trimmed_data(div_menu, '.tmi-group-name').split(", ")
+        weekday_date = _get_trimmed_data(div_menu, '.tmi-group-name').split(', ')
         date = dateparser.parse(weekday_date[1]).date()
 
         items = []
 
-        divs_items = div_menu.items(".tmi.tmi-daily")
+        divs_items = div_menu.items('.tmi.tmi-daily')
         for div_dish in divs_items:
             name = _get_trimmed_data(div_dish, '.tmi-name')
             price = _get_trimmed_data(div_dish, '.tmi-price.right')
@@ -83,7 +83,7 @@ def available_lunch_menu(menu_url):
 
 
 def _get_trimmed_data(node, selector):
-    return node(selector).text().encode('utf-8').strip()
+    return node(selector).text().strip()
 
 
 def _replace_ignore_case(text, what, to):
