@@ -13,7 +13,8 @@ class ZomatoApi:
         self.__api_key = api_key
 
     def search(self, query):
-        params = {'q': query, 'sort': 'rating', 'order': 'desc'}
+        # params = {'q': query, 'sort': 'rating', 'order': 'desc'}
+        params = {'q': query}
         api = 'search'
         response = self.get(api, params)
 

@@ -14,13 +14,12 @@ ZOMATO_API = zomato.ZomatoApi(settings_local.ZOMATO_API_KEY)
 
 
 @listen_to('Today\'s menu at (.*)\\?', re.IGNORECASE)
-@respond_to('Today\'s menu at (.*)\\?', re.IGNORECASE)
+@respond_to('(.*)', re.IGNORECASE)
 def todays_menu(message, query_str):
     handle_menu_request(message, query_str, dt.date.today())
 
 
 @listen_to('What is for lunch at (.*) on (.*)\\?', re.IGNORECASE)
-@respond_to('What is for lunch at (.*) on (.*)\\?', re.IGNORECASE)
 def menu_for_dat(message, query_str, date_str):
     date = dateparser.parse(date_str).date()
 
@@ -81,7 +80,7 @@ def __restaurant_menu_attachment(restaurant, menu):
 
     attachment = {
         "fallback": '%s\'s menu for the %s - %s' % (name, date, menu_url),
-        "title": '%s\'s menu' % name,
+        "title": '%s\'s menu for %s' % (name, menu.date),
         "title_link": menu_url,
         "thumb_url": logo_url,
         "text": items,
