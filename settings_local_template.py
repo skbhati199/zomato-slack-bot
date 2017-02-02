@@ -1,5 +1,5 @@
-ZOMATO_API_KEY = None
-SLACKBOT_API_TOKEN = None
+ZOMATO_API_KEY = "492a680d78dca124c2adba9b1416c295"
+SLACKBOT_API_TOKEN = "ynNG8IjpE5w1Um2xowe0txK6"
 SLACKBOT_PLUGINS = [
     'zomatobot.plugins',
 ]
